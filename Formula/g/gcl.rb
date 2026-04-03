@@ -30,7 +30,10 @@ class Gcl < Formula
     ENV.append "CPPFLAGS", "-I#{Formula["libtirpc"].opt_include}/tirpc"
     ENV["GCL_MULTIPROCESS_MEMORY_POOL"] = buildpath
 
-    system "./configure", "--disable-silent-rules", "--with-lispdir=#{elisp}", *std_configure_args
+    args = ["--disable-silent-rules", "--with-lispdir=#{elisp}"]
+    args << "--enable-min_pagewidth=16" if Hardware::CPU.arm64?
+
+    system "./configure", *args, *std_configure_args
     system "make", "install"
   end
 
