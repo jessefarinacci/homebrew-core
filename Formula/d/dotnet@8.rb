@@ -168,12 +168,13 @@ class DotnetAT8 < Formula
 
     # Test to avoid uploading broken Intel Sonoma bottle which has stack overflow on restore.
     # See https://github.com/Homebrew/homebrew-core/issues/197546
-    resource "sbom-tool" do
-      url "https://github.com/microsoft/sbom-tool/archive/refs/tags/v3.0.1.tar.gz"
-      sha256 "90085ab1f134f83d43767e46d6952be42a62dbb0f5368e293437620a96458867"
+    resource "docfx" do
+      url "https://github.com/dotnet/docfx/archive/refs/tags/v2.78.4.tar.gz"
+      sha256 "255f71f4a6fc7b9ffd0c598d0eba11630dc01262f1fa45ec4f1794508f7033cf"
     end
-    resource("sbom-tool").stage do
-      system bin/"dotnet", "restore", "src/Microsoft.Sbom.Tool", "--disable-build-servers", "--no-cache"
+    resource("docfx").stage do
+      msbuild_args = ["-p:TargetFrameworks=net8.0"]
+      system bin/"dotnet", "restore", "src/docfx", "--disable-build-servers", "--no-cache", *msbuild_args
     end
   end
 end
