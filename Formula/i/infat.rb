@@ -1,10 +1,10 @@
 class Infat < Formula
   desc "Tool to set default openers for file formats and url schemes on macOS"
   homepage "https://github.com/philocalyst/infat"
-  url "https://github.com/philocalyst/infat/archive/refs/tags/v3.0.3.tar.gz"
-  sha256 "116c0064ef15bccd358cc067ed52fefc745c6108854c6516d74c8c77a1ed437f"
-  license "MIT"
-  head "https://github.com/philocalyst/infat.git", branch: "main"
+  url "https://github.com/philocalyst/infat/archive/refs/tags/v3.1.2.tar.gz"
+  sha256 "ad32dd35fd8f6f77648416ff26504faab308c63de895cb3e45ac622eda71a9d6"
+  license "BlueOak-1.0.0"
+  head "https://github.com/philocalyst/infat.git", branch: "canonical"
 
   bottle do
     sha256 cellar: :any_skip_relocation, arm64_tahoe:   "a1f2cb6fd37b0c763c9fc03395c13858dab043c4d40d2c22762878adfbc7ae02"
@@ -26,7 +26,9 @@ class Infat < Formula
   end
 
   test do
-    output = shell_output("#{bin}/infat set TextEdit --ext txt")
+    assert_match version.to_s, shell_output("#{bin}/infat --version")
+
+    output = shell_output("#{bin}/infat set TextEdit --ext txt 2>&1", 1)
     assert_match "Set .txt", output
   end
 end
