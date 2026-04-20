@@ -1,8 +1,8 @@
 class OhMyAgent < Formula
   desc "Portable multi-agent harness for .agents-based skills and workflows"
   homepage "https://github.com/first-fluke/oh-my-agent"
-  url "https://registry.npmjs.org/oh-my-agent/-/oh-my-agent-5.12.0.tgz"
-  sha256 "5500f662d28eb6d3434ff7694dd6f81aee7aa7f4409b2bb10a52795d58f0ef7b"
+  url "https://registry.npmjs.org/oh-my-agent/-/oh-my-agent-5.13.0.tgz"
+  sha256 "1e94ab72fb159549804a6c3f7cd63c823e61db03d27de252f97d57fc0a6b5366"
   license "MIT"
 
   bottle do
@@ -13,6 +13,14 @@ class OhMyAgent < Formula
 
   def install
     system "npm", "install", *std_npm_args
+
+    node_modules = libexec/"lib/node_modules/oh-my-agent/node_modules"
+    # Remove incompatible pre-built `bare-fs`/`bare-os`/`bare-url` binaries
+    os = OS.kernel_name.downcase
+    arch = Hardware::CPU.intel? ? "x64" : Hardware::CPU.arch.to_s
+    node_modules.glob("{bare-fs,bare-os,bare-url}/prebuilds/*")
+                .each { |dir| rm_r(dir) if dir.basename.to_s != "#{os}-#{arch}" }
+
     bin.install_symlink Dir[libexec/"bin/*"]
   end
 
